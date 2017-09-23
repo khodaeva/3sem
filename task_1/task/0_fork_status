@@ -1,1 +1,25 @@
 /* Read the "4_exec_dir.c" carefully and correct the mistakes. Read about fork() return codes. */
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/wait.h>
+#include<stdlib.h>
+
+
+int main() {
+	pid_t pid;
+	int status, died;
+	switch (pid = fork()) {
+		case -1:
+			exit(-1);
+		case 0: 
+			died = execl("/bin/ls", "ls", "-l", NULL);
+			if (died == -1) {
+				exit(1);
+			};
+
+		default:
+			wait(&status);
+	}
+	return 0;
+}
+
