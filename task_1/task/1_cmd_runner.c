@@ -20,6 +20,7 @@
 int main()
 {
 	char c = 'a';
+	char t;
 	int argc, i, status;
 
 	while (tolower(c) != 'n') {
@@ -31,26 +32,26 @@ int main()
 		if (pid != 0) {
 			waitpid(pid, &status, 0);
 			printf("Ret code: %d\nOnce again?(y/n)\n", WEXITSTATUS(status));
-			scanf("%c", &c);
+			c = getchar();
 		} else {
-			printf("argc = ?\n");
-			scanf("%d", &argc);
 			char ** arg;
-			arg = (char **) malloc ((argc + 1) * sizeof(char *));
-			for (i = 0; i < argc; i++) {
+			arg = (char **) malloc (1 * sizeof(char *));
+			i = 0;
+			do {
 				arg[i] = (char*) malloc (100 * sizeof(char));
-			}
-			for (i = 0; i < argc; i++) {
 				scanf("%s", arg[i]);
-			}
+				i++;
+				arg = (char **) realloc (arg, (i + 1) * sizeof(char*));
+			} while (getchar() != '\n');
+			argc = i;
 			arg[argc] = NULL;
 			execvp(arg[0], arg);
 			for (i = 0; i < (argc + 1); i++) {
 				free(arg[i]);
 			}
-
 			free(arg);
 		}
 	}
 	return 0;
 }
+			
